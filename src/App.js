@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BookOpen, Shield, Users, GraduationCap, CheckCircle, Menu, X, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpen, Shield, Users, GraduationCap, CheckCircle } from 'lucide-react';
 
 const InterviewTutor = () => {
   const [currentView, setCurrentView] = useState('landing');
@@ -11,21 +11,10 @@ const InterviewTutor = () => {
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(false);
   const [questionHistory, setQuestionHistory] = useState([]);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(true);
 
   const subjects = [
-    'English',
-    'Biology',
-    'Physics', 
-    'Chemistry',
-    'Computer Science',
-    'History',
-    'Geography',
-    'PE',
-    'Visual Arts',
-    'Design Technology'
+    'English', 'Biology', 'Physics', 'Chemistry', 'Computer Science',
+    'History', 'Geography', 'PE', 'Visual Arts', 'Design Technology'
   ];
 
   const curriculums = ['IB MYP', 'IGCSE', 'IB Diploma', 'AP'];
@@ -50,29 +39,20 @@ const InterviewTutor = () => {
     let prompt = '';
     
     if (category === 'safeguarding') {
-      prompt = `Generate a realistic safeguarding interview question for a ${subject} teacher position at a ${tierContext} international school teaching ${curriculum}. The question should involve a scenario-based challenge about child protection, boundary management, or reporting procedures. Make it specific and challenging.`;
+      prompt = `Generate a realistic safeguarding interview question for a ${subject} teacher position at a ${tierContext} international school teaching ${curriculum}. The question should involve a scenario-based challenge about child protection, boundary management, or reporting procedures. Make it specific and challenging. Provide only the interview question, nothing else.`;
     } else if (category === 'extracurricular') {
-      prompt = `Generate a realistic interview question about extracurricular activities for a ${subject} teacher at a ${tierContext} international school teaching ${curriculum}. Ask about specific clubs, activities, or co-curriculars they could contribute to beyond the classroom.`;
+      prompt = `Generate a realistic interview question about extracurricular activities for a ${subject} teacher at a ${tierContext} international school teaching ${curriculum}. Ask about specific clubs, activities, or co-curriculars they could contribute to beyond the classroom. Provide only the interview question, nothing else.`;
     } else if (category === 'subject') {
-      prompt = `Generate a challenging subject-specific pedagogy question for a ${subject} teacher at a ${tierContext} international school teaching ${curriculum}. Focus on teaching methods, differentiation, or assessment strategies specific to ${subject}.`;
+      prompt = `Generate a challenging subject-specific pedagogy question for a ${subject} teacher at a ${tierContext} international school teaching ${curriculum}. Focus on teaching methods, differentiation, or assessment strategies specific to ${subject}. Provide only the interview question, nothing else.`;
     } else {
-      prompt = `Generate a curriculum-specific interview question for a ${subject} teacher at a ${tierContext} international school teaching ${curriculum}. Focus on the specific philosophy, requirements, or approaches of ${curriculum}.`;
+      prompt = `Generate a curriculum-specific interview question for a ${subject} teacher at a ${tierContext} international school teaching ${curriculum}. Focus on the specific philosophy, requirements, or approaches of ${curriculum}. Provide only the interview question, nothing else.`;
     }
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/api/generate-question', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: prompt + '\n\nProvide only the interview question, nothing else. Make it realistic and specific to international school hiring.'
-          }]
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
       });
 
       const data = await response.json();
@@ -82,6 +62,7 @@ const InterviewTutor = () => {
       setLoading(false);
     } catch (error) {
       console.error('Error generating question:', error);
+      setCurrentQuestion({ category, text: 'Error generating question. Please try again.' });
       setLoading(false);
     }
   };
@@ -95,20 +76,13 @@ const InterviewTutor = () => {
                        tier.includes('2') ? 'established school with strong standards' :
                        'emerging school focused on practical excellence';
 
+    const prompt = `You are an experienced international school hiring manager. A ${subject} teacher applying for a position at a ${tierContext} teaching ${curriculum} just answered this interview question:\n\nQuestion: ${currentQuestion.text}\n\nTheir answer: ${userAnswer}\n\nProvide constructive feedback on their answer. Include:\n1. What they did well\n2. What could be improved\n3. Specific suggestions for a stronger response\n4. Key points they should emphasize for international school interviews\n\nBe encouraging but honest.`;
+
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/api/generate-question', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: `You are an experienced international school hiring manager. A ${subject} teacher applying for a position at a ${tierContext} teaching ${curriculum} just answered this interview question:\n\nQuestion: ${currentQuestion.text}\n\nTheir answer: ${userAnswer}\n\nProvide constructive feedback on their answer. Include:\n1. What they did well\n2. What could be improved\n3. Specific suggestions for a stronger response\n4. Key points they should emphasize for international school interviews\n\nBe encouraging but honest.`
-          }]
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
       });
 
       const data = await response.json();
@@ -124,6 +98,7 @@ const InterviewTutor = () => {
       setLoading(false);
     } catch (error) {
       console.error('Error getting feedback:', error);
+      setFeedback('Error getting feedback. Please try again.');
       setLoading(false);
     }
   };
@@ -154,7 +129,7 @@ const InterviewTutor = () => {
               Master Your International School Interview
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              AI-powered interview preparation for teachers applying to IB, IGCSE, and AP programs worldwide. Practice with real questions from Tier 1, 2, and 3 international schools.
+              AI-powered interview preparation for teachers applying to IB, IGCSE, and AP programs worldwide.
             </p>
           </div>
 
@@ -165,7 +140,6 @@ const InterviewTutor = () => {
                 <div key={cat.id} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
                   <Icon className="w-10 h-10 text-indigo-600 mb-4" />
                   <h3 className="font-semibold text-lg mb-2">{cat.name}</h3>
-                  <p className="text-gray-600 text-sm">Expert preparation for {cat.name.toLowerCase()} questions</p>
                 </div>
               );
             })}
@@ -173,43 +147,31 @@ const InterviewTutor = () => {
 
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-4xl mx-auto">
             <div className="text-center mb-8">
-              <div className="inline-block bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                Professional Development Investment
-              </div>
               <h3 className="text-4xl font-bold text-gray-900 mb-4">$29.99/month</h3>
-              <p className="text-gray-600">Unlimited interview practice • AI feedback • Question bank access</p>
+              <p className="text-gray-600">Unlimited interview practice • AI feedback</p>
             </div>
 
             <div className="space-y-4 mb-8">
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <p className="text-gray-700">Unlimited AI-generated questions across all subjects and curricula</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <p className="text-gray-700">Personalized feedback on every answer from AI trained on international school hiring</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <p className="text-gray-700">Questions tailored to Tier 1, 2, or 3 school expectations</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <p className="text-gray-700">Safeguarding scenarios and extracurricular planning support</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                <p className="text-gray-700">Track your progress and review past practice sessions</p>
-              </div>
+              {[
+                'Unlimited AI-generated questions across all subjects',
+                'Personalized feedback on every answer',
+                'Questions tailored to Tier 1, 2, or 3 schools',
+                'Safeguarding scenarios and extracurricular planning',
+                'Track your progress'
+              ].map((item, i) => (
+                <div key={i} className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
+                  <p className="text-gray-700">{item}</p>
+                </div>
+              ))}
             </div>
 
             <button 
               onClick={() => setCurrentView('setup')}
-              className="w-full bg-indigo-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-indigo-700 transition shadow-lg"
+              className="w-full bg-indigo-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-indigo-700 transition"
             >
-              Start Your Free 7-Day Trial
+              Start Free Trial
             </button>
-            <p className="text-center text-sm text-gray-500 mt-4">No credit card required for trial • Cancel anytime</p>
           </div>
         </div>
       </div>
@@ -221,7 +183,7 @@ const InterviewTutor = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
         <div className="max-w-4xl mx-auto pt-8">
           <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome! Let's Set Up Your Profile</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Set Up Your Profile</h2>
             <p className="text-gray-600 mb-8">Tell us about the position you're preparing for</p>
 
             <div className="space-y-6">
@@ -361,7 +323,7 @@ const InterviewTutor = () => {
               <div className="bg-white rounded-xl shadow-md p-12 text-center">
                 <GraduationCap className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Ready to Practice?</h3>
-                <p className="text-gray-600">Select a question category from the left to begin your interview preparation</p>
+                <p className="text-gray-600">Select a question category to begin</p>
               </div>
             )}
 
@@ -390,14 +352,14 @@ const InterviewTutor = () => {
                 <textarea
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
-                  placeholder="Type your response here... Take your time and be specific."
+                  placeholder="Type your response here..."
                   className="w-full h-48 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
                   disabled={loading}
                 />
                 <button
                   onClick={getFeedback}
                   disabled={!userAnswer.trim() || loading}
-                  className="mt-4 w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="mt-4 w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50"
                 >
                   Get Feedback
                 </button>
