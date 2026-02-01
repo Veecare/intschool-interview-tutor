@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-const InterviewTutor = () => {
-  const [currentView, setCurrentView] = useState('landing');
-const navigate = useNavigate();
-head -100 src/App.js
+import VoiceRecorder from './VoiceRecorder';
 import { BookOpen, Shield, Users, GraduationCap, CheckCircle } from 'lucide-react';
 
 const InterviewTutor = () => {
+  const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('landing');
   const [subject, setSubject] = useState('');
   const [curriculum, setCurriculum] = useState('');
