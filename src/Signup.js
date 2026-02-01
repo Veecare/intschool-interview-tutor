@@ -13,7 +13,7 @@ function Signup() {
           routing="path" 
           path="/signup"
           signInUrl="/login"
-          afterSignUpUrl="/"
+          afterSignUpUrl={window.location.origin}
         />
       </div>
     </div>
