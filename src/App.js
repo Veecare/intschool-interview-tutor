@@ -19,11 +19,25 @@ const InterviewTutor = () => {
   const [questionHistory, setQuestionHistory] = useState([]);
 
   const subjects = [
-    'English', 'Biology', 'Physics', 'Chemistry', 'Computer Science',
-    'History', 'Geography', 'PE', 'Visual Arts', 'Design Technology'
-  ];
+  // Languages
+  'English A (Language & Literature)', 'English B', 'French', 'Spanish', 'Mandarin', 'German', 
+  // Sciences
+  'Biology', 'Chemistry', 'Physics', 'Environmental Systems & Societies', 'Sports Science',
+  'Computer Science', 'Design Technology',
+  // Humanities
+  'History', 'Geography', 'Economics', 'Business Management', 'Psychology', 'Global Politics',
+  'Philosophy', 'Anthropology',
+  // Arts
+  'Visual Arts', 'Music', 'Theatre', 'Film', 'Dance',
+  // Mathematics
+  'Mathematics AA', 'Mathematics AI', 'Mathematics (General)',
+  // Primary/PYP
+  'PYP Homeroom', 'PYP Specialist',
+  // Others
+  'TOK', 'Extended Essay Coordinator', 'CAS Coordinator', 'Physical Education'
+];
 
-  const curriculums = ['IB MYP', 'IGCSE', 'IB Diploma', 'AP'];
+  const curriculums = ['IB PYP', 'IB MYP', 'IB Diploma', 'IGCSE', 'A-Level', 'AP'];
   const tiers = ['Tier 1 (Elite)', 'Tier 2 (Established)', 'Tier 3 (Emerging)'];
 
   const questionCategories = [
