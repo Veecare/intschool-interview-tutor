@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+const InterviewTutor = () => {
+  const [currentView, setCurrentView] = useState('landing');
+const navigate = useNavigate();
+head -100 src/App.js
 import { BookOpen, Shield, Users, GraduationCap, CheckCircle } from 'lucide-react';
 
 const InterviewTutor = () => {
@@ -109,8 +115,41 @@ const InterviewTutor = () => {
         <nav className="bg-white shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-2">
-                <GraduationCap className="w-8 h-8 text-indigo-600" />
+  <div>
+    <h1 className="text-xl font-bold text-gray-900">Interview Practice</h1>
+    <p className="text-sm text-gray-600">{subject} • {curriculum} • {tier}</p>
+  </div>
+  <div className="flex items-center gap-4">
+    <SignedIn>
+      <button 
+        onClick={() => navigate('/billing')}
+        className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+      >
+        Manage Subscription
+      </button>
+      <UserButton afterSignOutUrl="/" />
+    </SignedIn>
+    <SignedOut>
+      <button 
+        onClick={() => navigate('/login')}
+        className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+      >
+        Sign In
+      </button>
+    </SignedOut>
+    <button 
+      onClick={() => {
+        setCurrentView('setup');
+        setCurrentQuestion(null);
+        setUserAnswer('');
+        setFeedback('');
+      }}
+      className="text-indigo-600 hover:text-indigo-700 font-medium"
+    >
+      Change Settings
+    </button>
+  </div>
+</div>
                 <h1 className="text-2xl font-bold text-gray-900">IntSchool Interview Tutor</h1>
               </div>
               <button 
