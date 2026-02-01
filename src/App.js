@@ -402,7 +402,9 @@ const InterviewTutor = () => {
             {currentQuestion && !feedback && (
               <div className="bg-white rounded-xl shadow-md p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Answer</h3>
-                <textarea
+                <textarea<div className="mt-3">
+  <VoiceRecorder onTranscript={(text) => setUserAnswer(text)} />
+</div>
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
                   placeholder="Type your response here..."
