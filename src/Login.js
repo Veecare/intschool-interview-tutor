@@ -13,7 +13,11 @@ function Login() {
           routing="path" 
           path="/login"
           signUpUrl="/signup"
-          afterSignInUrl="https://teacher-interview-tutor.com"
+          <SignIn
+          routing="path"
+          path="/login"
+          signUpUrl="/signup"
+        />
         />
       </div>
     </div>
