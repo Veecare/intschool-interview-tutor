@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
+const subjects = [
+    'English A', 'English B', 'French', 'Spanish', 'Mandarin', 'German',
+    'Biology', 'Chemistry', 'Physics', 'Environmental Systems', 'Computer Science',
+    'History', 'Geography', 'Economics', 'Business', 'Psychology',
+    'Visual Arts', 'Music', 'Theatre', 'Film', 'Dance',
+    'Mathematics AA', 'Mathematics AI', 'Mathematics',
+    'PYP Homeroom', 'TOK', 'PE'
+  ];
+
+  const curriculums = ['IB PYP', 'IB MYP', 'IB Diploma', 'IGCSE', 'A-Level', 'AP'];import React, { useState } from 'react';
 import { BookOpen, Shield, Users, GraduationCap, CheckCircle } from 'lucide-react';
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+import VoiceRecorder from './VoiceRecorder';
 
 const InterviewTutor = () => {
+  const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('landing');
   const [subject, setSubject] = useState('');
   const [curriculum, setCurriculum] = useState('');
