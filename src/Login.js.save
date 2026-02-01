@@ -1,3 +1,8 @@
+afterSignUpUrl={window.location.origin}
+git add src/Login.js src/Signup.js
+git commit -m "Fix redirect after sign in"
+git pushcat src/Login.js
+cat src/Signup.js
 import React from 'react';
 import { SignIn } from '@clerk/clerk-react';
 
@@ -9,10 +14,11 @@ function Login() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to IntSchool Interview Tutor</p>
         </div>
-        <SignIn
-          routing="path"
+        <SignIn 
+          routing="path" 
           path="/login"
           signUpUrl="/signup"
+          afterSignInUrl="/"
         />
       </div>
     </div>
