@@ -1,10 +1,12 @@
+import { useUser } from '@clerk/clerk-react';
 import React, { useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 
 function Billing() {
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+
 
   const handleManageSubscription = async () => {
     setLoading(true);
@@ -14,7 +16,10 @@ function Billing() {
       const response = await fetch('/api/customer-portal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify({ 
+  userId: user?.id,
+  email: user?.primaryEmailAddress?.emailAddress 
+}),
           email: user?.primaryEmailAddress?.emailAddress,
         }),
       });
